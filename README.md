@@ -1,6 +1,6 @@
-# yydevcli
+# yydevcli-vue2
 
-基于 `Webpack 5` 的自用打包库, 支持 `React` 和 `Vue 2`
+基于 `Webpack 5` 的自用 `Vue 2` 打包
 
 ## `yy.config.js`
 
@@ -12,7 +12,6 @@
 ### 自定义设置(@开头)
 
 - `@hash=true`: 文件是否增加哈希值
-- `@themeVars: Object`: 可配置 antd 主题选项
 - `@HtmlWebpackPluginOption: Object`: HTML 模版配置
 
 ### 其他
