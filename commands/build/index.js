@@ -9,7 +9,7 @@ const webpackDefaultOption = require("./webpack.config");
 const _ = require("lodash");
 
 module.exports = ctx => {
-  print(`yy-cli version: ${package.version}`);
+  print(`yv2-cli version: ${package.version}`);
   const { cwd, loadFile, env = "hot" } = ctx;
   const yyconfig = loadFile("yy.config.js") || {};
   const userOption = getWebpackUserOption(yyconfig, ctx);
@@ -147,8 +147,7 @@ function getWebpackUserOption(yyconfig, ctx) {
 
   // 添加 @ 别名
   _.set(option, "resolve.alias.@", buildFolder);
-  _.set(option, "resolve.alias.vue$", "@vue/runtime-dom");
-  _.set(option, "resolve.alias.vuex", "vuex/dist/vuex.esm-bundler");
+  _.set(option, "resolve.alias.vue$", "vue/dist/vue.esm");
 
   return option;
 }

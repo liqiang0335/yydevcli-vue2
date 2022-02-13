@@ -80,10 +80,7 @@ module.exports = function (userOption, ctx) {
     },
     module: {
       rules: [
-        {
-          test: /\.vue$/,
-          loader: "vue-loader",
-        },
+        { test: /\.vue$/, loader: "vue-loader" },
         {
           test: /\.(js|jsx)$/,
           use: [{ loader: "babel-loader", options: babelOptions[framework] }],
