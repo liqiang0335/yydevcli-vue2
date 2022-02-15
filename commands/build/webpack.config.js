@@ -152,8 +152,6 @@ function createScssRules(ctx) {
 function shouldOpimization(ctx) {
   if (!ctx.isPro) return {};
   return {
-    runtimeChunk: "single",
-    splitChunks: { chunks: "all" },
     minimize: true,
     minimizer: [
       compiler => {
