@@ -4,5 +4,3 @@ dist
 build
 .vscode/sftp.json
 *.log
-**/*.min.js
-**/*.min.css
