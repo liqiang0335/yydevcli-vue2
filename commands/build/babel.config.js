@@ -9,7 +9,6 @@ const BabelEnv = [
 ];
 
 const CommonPlugins = [
-  "ynw",
   "webpack-async-module-name",
   "@babel/plugin-transform-runtime",
   "@babel/plugin-proposal-optional-chaining",
@@ -28,10 +27,7 @@ module.exports = {
     presets: [BabelEnv],
     plugins: [
       ...CommonPlugins,
-      [
-        "component",
-        { libraryName: "element-ui", styleLibraryName: "theme-chalk" },
-      ],
+      ["component", { libraryName: "element-ui", styleLibraryName: "theme-chalk" }],
       ["import", { libraryName: "vant", libraryDirectory: "es", style: true }],
     ],
   },
