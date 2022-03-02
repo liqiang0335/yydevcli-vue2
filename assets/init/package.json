@@ -19,7 +19,7 @@
     "vue": "2.6.14",
     "vue-router": "^3.5.3",
     "vuex": "^3.5.1",
-    "ynw": "^5.1.1"
+    "ynw": "latest"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.2",
