@@ -5,6 +5,9 @@
  * ----------------------------------------
  */
 module.exports = {
+  vscode: {
+    cmdName: "yv2",
+  },
   common: {
     "@hash": true,
     "@themeVars": {

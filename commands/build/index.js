@@ -27,6 +27,9 @@ module.exports = ctx => {
   const defaultOption = webpackDefaultOption(userOption, ctx);
   const option = deepmerge(defaultOption, userOption);
 
+  const { host, port } = option.devServer;
+  option.devServer.port = await getValidPort({ host, port });
+
   if (ctx.logs) {
     print("ctx", ctx);
     print("option", option);
@@ -114,11 +117,7 @@ function getWebpackUserOption(yyconfig, ctx) {
   const { common: commonOption, pages } = yyconfig;
   const pageOption = pages[ctx.build] || {};
 
-  const option = deepmerge.all([
-    commonOption,
-    pageOption,
-    { entry: ctx.entry },
-  ]);
+  const option = deepmerge.all([commonOption, pageOption, { entry: ctx.entry }]);
 
   const buildFilePath = path.join(ctx.cwd, option.entry);
   const buildFolder = path.dirname(buildFilePath);
@@ -130,9 +129,7 @@ function getWebpackUserOption(yyconfig, ctx) {
   // 创建模版文件
   const templateFilePath = path.join(buildFolder, "template.html");
   if (!fs.existsSync(templateFilePath)) {
-    const source = fs.readFileSync(
-      path.join(__dirname, "../../assets/template.html")
-    );
+    const source = fs.readFileSync(path.join(__dirname, "../../assets/template.html"));
     fs.writeFileSync(templateFilePath, source);
     print("添加模版:template.html");
   }
@@ -150,4 +147,16 @@ function getWebpackUserOption(yyconfig, ctx) {
   _.set(option, "resolve.alias.vue$", "vue/dist/vue.esm");
 
   return option;
+}
+
+async function getValidPort({ host, port }) {
+  const url = `http://${host}:${port}`;
+  try {
+    await axios.get(url);
+    return getValidPort({ host, port: port + 1 });
+  } catch (err) {
+    if (err.code === "ECONNREFUSED") {
+      return port;
+    }
+  }
 }
