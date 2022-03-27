@@ -8,7 +8,7 @@ const webpack = require("webpack");
 const webpackDefaultOption = require("./webpack.config");
 const _ = require("lodash");
 
-module.exports = ctx => {
+module.exports = async ctx => {
   print(`yv2-cli version: ${package.version}`);
   const { cwd, loadFile, env = "hot" } = ctx;
   const yyconfig = loadFile("yy.config.js") || {};
