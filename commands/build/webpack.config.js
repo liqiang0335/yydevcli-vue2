@@ -16,7 +16,7 @@ module.exports = function (userOption, ctx) {
   const outputPath = userOption.output?.path || ctx.buildFolder + "/dist";
 
   const { framework = "react", isPro } = ctx;
-  const hashHolder = hash ? ".[contenthash:6]" : "";
+  const hashHolder = hash ? ".[contenthash:6]" : ".bundle";
   const sassRule = createScssRules(ctx);
   const babelOps = babelOptions({ browsers })[framework];
 
@@ -35,7 +35,7 @@ module.exports = function (userOption, ctx) {
     entry: "./main/index.js",
     target: "web",
     output: {
-      filename: `${ctx.build}${hashHolder}.bundle.js`,
+      filename: `${ctx.build}${hashHolder}.js`,
       path: outputPath,
       clean: true,
     },
@@ -46,7 +46,7 @@ module.exports = function (userOption, ctx) {
       },
       compiler => {
         new MiniCssExtractPlugin({
-          filename: `${ctx.build}${hashHolder}.bundle.css`,
+          filename: `${ctx.build}${hashHolder}.css`,
         }).apply(compiler);
       },
       compiler => {
