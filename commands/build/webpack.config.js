@@ -9,6 +9,7 @@ const print = require("../../utils/print");
  * ----------------------------------------
  */
 module.exports = function (userOption, ctx) {
+  const browsers = userOption["@browsers"] || ["chrome >= 60"];
   const hash = userOption["@hash"];
   const themeVars = userOption["@themeVars"] || {};
   const HtmlWebpackPluginOption = userOption["@HtmlWebpackPluginOption"] || {};
@@ -17,6 +18,7 @@ module.exports = function (userOption, ctx) {
   const { framework = "react", isPro } = ctx;
   const hashHolder = hash ? ".[contenthash:6]" : "";
   const sassRule = createScssRules(ctx);
+  const babelOps = babelOptions({ browsers })[framework];
 
   // 检测SCSS全局变量
   const sassVar = path.join(ctx.buildFolder, "style/var.scss");
@@ -33,7 +35,7 @@ module.exports = function (userOption, ctx) {
     entry: "./main/index.js",
     target: "web",
     output: {
-      filename: `${ctx.build}${hashHolder}.min.js`,
+      filename: `${ctx.build}${hashHolder}.bundle.js`,
       path: outputPath,
       clean: true,
     },
@@ -44,7 +46,7 @@ module.exports = function (userOption, ctx) {
       },
       compiler => {
         new MiniCssExtractPlugin({
-          filename: `${ctx.build}${hashHolder}.min.css`,
+          filename: `${ctx.build}${hashHolder}.bundle.css`,
         }).apply(compiler);
       },
       compiler => {
@@ -83,12 +85,12 @@ module.exports = function (userOption, ctx) {
         { test: /\.vue$/, loader: "vue-loader" },
         {
           test: /\.(js|jsx)$/,
-          use: [{ loader: "babel-loader", options: babelOptions[framework] }],
+          use: [{ loader: "babel-loader", options: babelOps }],
           exclude: /node_modules/,
         },
         {
           test: /ynw.+js$/,
-          use: [{ loader: "babel-loader", options: babelOptions[framework] }],
+          use: [{ loader: "babel-loader", options: babelOps }],
         },
         {
           test: /\.css$/,
@@ -133,10 +135,7 @@ function createScssRules(ctx) {
         loader: "css-loader",
         options: {
           importLoaders: 1,
-          modules:
-            ctx.framework === "vue"
-              ? false
-              : { localIdentName: "[name]-[local]-[hash:base64:5]" },
+          modules: ctx.framework === "vue" ? false : { localIdentName: "[name]-[local]-[hash:base64:5]" },
         },
       },
       "postcss-loader",
