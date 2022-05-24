@@ -27,9 +27,6 @@ module.exports = async ctx => {
   const defaultOption = webpackDefaultOption(userOption, ctx);
   const option = deepmerge(defaultOption, userOption);
 
-  const { host, port } = option.devServer;
-  option.devServer.port = await getValidPort({ host, port });
-
   if (ctx.logs) {
     print("ctx", ctx);
     print("option", option);
