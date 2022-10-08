@@ -1,5 +1,6 @@
 /**
  * ----------------------------------------
+ * [doc](https://github.com/liqiang0335/yydevcli)
  * [@themeVars](https://ant.design/docs/react/customize-theme-cn)
  * [@HtmlWebpackPluginOption](https://github.com/jantimon/html-webpack-plugin#options)
  * ----------------------------------------
@@ -9,7 +10,7 @@ module.exports = {
     cmdName: "yv2",
   },
   common: {
-    "@hash": true,
+    "@hash": false,
     "@themeVars": {
       "@primary-color": "#435ba3",
       "@border-radius-base": "2px",
