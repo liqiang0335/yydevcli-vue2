@@ -123,12 +123,14 @@ function getWebpackUserOption(yyconfig, ctx) {
     throw new Error(`请配置 'entry' 参数`);
   }
 
-  // 创建模版文件
-  const templateFilePath = path.join(buildFolder, "template.html");
-  if (!fs.existsSync(templateFilePath)) {
-    const source = fs.readFileSync(path.join(__dirname, "../../assets/template.html"));
-    fs.writeFileSync(templateFilePath, source);
-    print("添加模版:template.html");
+  // create template.html
+  if (option["@template"] !== false) {
+    const templateFilePath = path.join(buildFolder, "template.html");
+    if (!fs.existsSync(templateFilePath)) {
+      const source = fs.readFileSync(path.join(__dirname, "../../assets/template.html"));
+      fs.writeFileSync(templateFilePath, source);
+      print("添加模版:template.html");
+    }
   }
 
   // 别名添加绝对路径
