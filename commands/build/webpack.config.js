@@ -14,6 +14,7 @@ module.exports = function (userOption, ctx) {
   const themeVars = userOption["@themeVars"] || {};
   const HtmlWebpackPluginOption = userOption["@HtmlWebpackPluginOption"] || {};
   const outputPath = userOption.output?.path || ctx.buildFolder + "/dist";
+  const saveFolder = userOption["@saveFolder"] === undefined ? "bundle/" : userOption["@saveFolder"];
 
   const { framework = "react", isPro } = ctx;
   const hashHolder = hash ? ".[contenthash:6]" : ".bundle";
@@ -30,26 +31,27 @@ module.exports = function (userOption, ctx) {
     });
   }
 
-  return {
+  const webpackOption = {
     mode: isPro ? "production" : "development",
     entry: "./main/index.js",
     target: "web",
     output: {
-      filename: `${ctx.build}${hashHolder}.js`,
+      filename: saveFolder + `${ctx.build}${hashHolder}.js`,
       path: outputPath,
       clean: true,
+      assetModuleFilename: "assets/[hash][ext]",
     },
     plugins: [
-      compiler => {
+      (compiler) => {
         const { VueLoaderPlugin } = require("vue-loader");
         new VueLoaderPlugin().apply(compiler);
       },
-      compiler => {
+      (compiler) => {
         new MiniCssExtractPlugin({
           filename: `${ctx.build}${hashHolder}.css`,
         }).apply(compiler);
       },
-      compiler => {
+      (compiler) => {
         const Option = require("html-webpack-plugin");
         new Option({
           template: path.join(ctx.buildFolder, "template.html"),
@@ -57,7 +59,7 @@ module.exports = function (userOption, ctx) {
           ...HtmlWebpackPluginOption,
         }).apply(compiler);
       },
-      compiler => {
+      (compiler) => {
         const WebpackBar = require("webpackbar");
         new WebpackBar().apply(compiler);
       },
@@ -124,6 +126,8 @@ module.exports = function (userOption, ctx) {
       ],
     },
   };
+
+  return webpackOption;
 };
 
 function createScssRules(ctx) {
@@ -153,14 +157,14 @@ function shouldOpimization(ctx) {
   return {
     minimize: true,
     minimizer: [
-      compiler => {
+      (compiler) => {
         const TerserPlugin = require("terser-webpack-plugin");
         new TerserPlugin({
           terserOptions: { format: { comments: false } },
           extractComments: false,
         }).apply(compiler);
       },
-      compiler => {
+      (compiler) => {
         const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
         new CssMinimizerPlugin().apply(compiler);
       },
