@@ -48,7 +48,7 @@ module.exports = function (userOption, ctx) {
       },
       (compiler) => {
         new MiniCssExtractPlugin({
-          filename: `${ctx.build}${hashHolder}.css`,
+          filename: saveFolder + `${ctx.build}${hashHolder}.css`,
         }).apply(compiler);
       },
       (compiler) => {
