@@ -8,7 +8,7 @@ const webpack = require("webpack");
 const webpackDefaultOption = require("./webpack.config");
 const _ = require("lodash");
 
-module.exports = async ctx => {
+module.exports = async (ctx) => {
   print(`yv2-cli version: ${package.version}`);
   const { cwd, loadFile, env = "hot" } = ctx;
   const yyconfig = loadFile("yy.config.js") || {};
@@ -26,6 +26,9 @@ module.exports = async ctx => {
 
   const defaultOption = webpackDefaultOption(userOption, ctx);
   const option = deepmerge(defaultOption, userOption);
+
+  const { host, port } = option.devServer;
+  print("http://" + host + ":" + port);
 
   if (ctx.logs) {
     print("ctx", ctx);
@@ -146,16 +149,4 @@ function getWebpackUserOption(yyconfig, ctx) {
   _.set(option, "resolve.alias.vue$", "vue/dist/vue.esm");
 
   return option;
-}
-
-async function getValidPort({ host, port }) {
-  const url = `http://${host}:${port}`;
-  try {
-    await axios.get(url, { timeout: 2000 });
-    return getValidPort({ host, port: port + 1 });
-  } catch (err) {
-    if (err.code === "ECONNREFUSED") {
-      return port;
-    }
-  }
 }
